@@ -1,21 +1,22 @@
+// --- GAME MANAGER ---
 using UnityEngine;
-using TMPro;
+using TMPro; // text
 
 public class GameManager : MonoBehaviour
 {
+    // Variables
     public TextMeshProUGUI mainText;
-
     private float timer;
     private GameState currentState;
     private Vector3 lastMousePosition;
-
-    void Start()
+    
+    void Start() // Runs on execution
     {
         lastMousePosition = Input.mousePosition;
         SetState(GameState.WaitingToStart);
     }
 
- void Update()
+ void Update() // Updates every frame
 {
     switch (currentState)
     {
@@ -26,7 +27,7 @@ public class GameManager : MonoBehaviour
 
         case GameState.DoingNothing:
             timer += Time.deltaTime;
-            mainText.text = $"You've been doing Nothing for {timer:F2} seconds."; // always overwrite
+            mainText.text = $"You've been doing Nothing for {timer:F2} seconds.";
 
             if (DetectedSomething() || !Application.isFocused)
                 SetState(GameState.Lost);
@@ -38,12 +39,12 @@ public class GameManager : MonoBehaviour
             if (Input.GetKeyDown(KeyCode.Escape))
                 Application.Quit();
             else if (Input.anyKeyDown)
-                SetState(GameState.DoingNothing); // this now fully clears old text
+                SetState(GameState.DoingNothing);
             break;
     }
 }
 
-    void SetState(GameState newState)
+    void SetState(GameState newState) // State logic
     {
         currentState = newState;
 
@@ -67,7 +68,7 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    bool DetectedSomething()
+    bool DetectedSomething() // Detection logic
     {
         if (Input.anyKeyDown)
             return true;
@@ -80,7 +81,7 @@ public class GameManager : MonoBehaviour
     }
 }
 
-public enum GameState
+public enum GameState // Defining all states
 {
     WaitingToStart,
     DoingNothing,
