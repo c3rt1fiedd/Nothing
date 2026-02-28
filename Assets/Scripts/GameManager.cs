@@ -15,33 +15,33 @@ public class GameManager : MonoBehaviour
         SetState(GameState.WaitingToStart);
     }
 
-    void Update()
+ void Update()
+{
+    switch (currentState)
     {
-        switch (currentState)
-        {
-            case GameState.WaitingToStart:
+        case GameState.WaitingToStart:
             if (Input.anyKeyDown)
                 SetState(GameState.DoingNothing);
             break;
 
-            case GameState.DoingNothing:
-                timer += Time.deltaTime;
-                mainText.text = $"You've been doing Nothing for {timer:F2} seconds.";
+        case GameState.DoingNothing:
+            timer += Time.deltaTime;
+            mainText.text = $"You've been doing Nothing for {timer:F2} seconds."; // always overwrite
 
-                if (DetectedSomething() || !Application.isFocused)
-                    SetState(GameState.Lost);
+            if (DetectedSomething() || !Application.isFocused)
+                SetState(GameState.Lost);
 
-                lastMousePosition = Input.mousePosition;
-                break;
+            lastMousePosition = Input.mousePosition;
+            break;
 
-            case GameState.Lost:
-                if (Input.GetKeyDown(KeyCode.Escape))
-                    Application.Quit();
-                else if (Input.anyKeyDown)
-                    SetState(GameState.DoingNothing);
-                break;
-        }
+        case GameState.Lost:
+            if (Input.GetKeyDown(KeyCode.Escape))
+                Application.Quit();
+            else if (Input.anyKeyDown)
+                SetState(GameState.DoingNothing); // this now fully clears old text
+            break;
     }
+}
 
     void SetState(GameState newState)
     {
